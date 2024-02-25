@@ -1,0 +1,79 @@
+use('cafeteria');
+
+db.createCollection("Productos")
+
+db.Productos.insertMany([
+    { codigoProducto: "001", nombre: "Café", stock: 100, precio: 5.00, fechaVencimiento: "2025-01-01", peso: 0.5, RUC: "12345678901" },
+    { codigoProducto: "002", nombre: "Té", stock: 80, precio: 3.50, fechaVencimiento: "2025-02-01", peso: 0.3, RUC: "23456789012" },
+    { codigoProducto: "003", nombre: "Leche", stock: 120, precio: 1.50, fechaVencimiento: "2025-03-01", peso: 1.0, RUC: "34567890123" },
+    { codigoProducto: "004", nombre: "Azúcar", stock: 90, precio: 2.00, fechaVencimiento: "2025-04-01", peso: 0.8, RUC: "45678901234" },
+    { codigoProducto: "005", nombre: "Pan", stock: 70, precio: 1.20, fechaVencimiento: "2025-05-01", peso: 0.4, RUC: "56789012345" },
+    { codigoProducto: "006", nombre: "Galletas", stock: 150, precio: 1.80, fechaVencimiento: "2025-06-01", peso: 0.9, RUC: "12345678901" },
+    { codigoProducto: "007", nombre: "Miel", stock: 100, precio: 4.50, fechaVencimiento: "2025-07-01", peso: 0.7, RUC: "23456789012" },
+    { codigoProducto: "008", nombre: "Jarabe de Chocolate", stock: 120, precio: 3.50, fechaVencimiento: "2025-08-01", peso: 0.6, RUC: "34567890123" },
+    { codigoProducto: "009", nombre: "Café Instantáneo", stock: 80, precio: 6.00, fechaVencimiento: "2025-09-01", peso: 0.4, RUC: "45678901234" },
+    { codigoProducto: "010", nombre: "Jarabe de vainilla", stock: 90, precio: 2.50, fechaVencimiento: "2025-10-01", peso: 0.4, RUC: "56789012345" },
+    { codigoProducto: "011", nombre: "Canela Molida", stock: 200, precio: 1.00, fechaVencimiento: "2025-11-01", peso: 0.2, RUC: "67890123456" },
+    { codigoProducto: "012", nombre: "Crema para Café", stock: 100, precio: 3.00, fechaVencimiento: "2025-12-01", peso: 0.5, RUC: "78901234567" },
+    { codigoProducto: "013", nombre: "Muffins", stock: 120, precio: 2.20, fechaVencimiento: "2026-01-01", peso: 0.6, RUC: "89012345678" },
+    { codigoProducto: "014", nombre: "Edulcorante", stock: 150, precio: 2.50, fechaVencimiento: "2026-02-01", peso: 0.2, RUC: "90123456789" }
+])
+
+db.Productos.insertOne({
+    codigoProducto: "015",
+    nombre: "Café descafeinado",
+    stock: 110,
+    precio: 4.00,
+    fechaVencimiento: "2025-06-01",
+    peso: 0.5,
+    RUC: "12345678901"
+})
+
+db.Productos.remove(
+    { nombre: "Té", stock: { $gte: 40, $lte:80 } }
+)
+
+db.Productos.deleteMany({
+    $and: [
+        { peso: { $gte: 1.0 } },
+        { fechaVencimiento: { $lt: "2025-06-01" } }
+    ]
+})
+
+db.Productos.remove({
+    stock: { $gte: 100 },
+    precio: { $lte: 2.00 }
+})
+
+db.Productos.update(
+    { stock: 150, peso: { $gte: 0.2, $lte: 0.4 } },
+    { $set: { nombre: "Chocolatada" } },
+)
+
+db.Productos.find({
+    $or: [
+        { precio: { $lt: 2.00 } },
+        { stock: { $gt: 100 } }
+    ]
+})
+
+db.Productos.find({
+    $and: [
+        { precio: { $gte: 1.00, $lte: 3.00 } },
+        { nombre: { $in: ["Azúcar", "Pan"] } }
+    ]
+})
+
+db.Productos.find({
+    nombre: /^E/,
+    precio: { $lt: 2.00 }
+})
+
+db.Productos.find({
+    $or: [
+        { nombre: "Leche" },
+        { nombre: "Miel" },
+        { nombre: "Galletas" }
+    ],
+    fechaVencimiento: "2025-06-01"
+})
